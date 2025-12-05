@@ -19,7 +19,14 @@ const userSchema=new mongoose.Schema({
     bio:{
         type:Object,
         default:{
-            type:""
+            type: "",
+            title:"",
+            pic: "",
+            email: "",
+            experience: "",
+            education: "",
+            skills: [],
+            resume: ""
         }
     },
 

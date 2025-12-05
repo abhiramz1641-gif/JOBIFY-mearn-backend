@@ -26,6 +26,10 @@ route.put("/admin-job-approval",jobController.adminJobApprovalController)
 
 route.put("/job-edit",jobController.jobEditController)
 
+route.put("/user-edit",userController.editUserController)
+
+route.post("/get-user",userController.getUserData)
+
 
 // mail
 // route.post("/forgot-password", userController.forgotPasswordController)

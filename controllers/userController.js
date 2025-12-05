@@ -27,7 +27,7 @@ exports.registerController = async (req, res) => {
             res.status(400).json("Already registered user..")
         } else {
             const newUser = new users({
-                username, email, password ,bio
+                username, email, password, bio
             })
 
             // const hash = await bcrypt.hash(password, 10)
@@ -64,7 +64,7 @@ exports.loginController = async (req, res) => {
             // mail
             // const isMatch = await bcrypt.compare(password, existingUser.password)
             // if (isMatch)
-            if (existingUser.password == password){ 
+            if (existingUser.password == password) {
                 // JWT encryption 
                 const token = jwt.sign({ userMail: existingUser.email }, "secretKey")
                 res.status(200).json({ existingUser, token })
@@ -84,6 +84,63 @@ exports.loginController = async (req, res) => {
 
 
 }
+
+exports.getUserData = async (req, res) => {
+
+    
+
+    const {email} = req.body
+
+    try {
+
+        const existingUser = await users.findOne({ email })
+        if (existingUser) {
+            res.status(200).json({ existingUser })
+        } else {
+            res.status(400).json("User does not exist")
+        }
+
+    } catch (err) {
+        res.status(500).json(err)
+
+    }
+
+}
+
+exports.editUserController = async (req, res) => {
+
+
+    const body = req.body;
+    //console.log(body);
+
+    const id = body._id
+    
+    //console.log(id);
+
+    const { username, email, password, bio }=req.body
+
+    try {
+        //updated job with that id
+        const updatedUser = await users.findByIdAndUpdate(
+            id,
+            { $set: { username, email, password, bio } },
+            { new: true }
+        );
+
+        console.log(updatedUser); 
+
+        if (!updatedUser) {
+            return res.status(404).json("User not edited");
+        }
+
+        res.status(200).json(updatedUser);
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+
+}
+
 
 
 // mail

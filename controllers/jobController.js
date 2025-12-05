@@ -4,16 +4,16 @@ const { loginController } = require('./userController');
 
 exports.addJobController = async (req, res) => {
 
-    const { jobTitle, company, description, skills, location, salary, jobType, employerMail, status } = req.body
-    console.log(jobTitle, company, description, skills, location, salary, jobType, employerMail);
+    const { jobTitle, company, description, skills, location, salary, jobType, employerMail,experience, status } = req.body
+    //console.log(jobTitle, company, description, skills, location, salary, jobType, employerMail,experience);
 
     try {
 
-        const existingJob = await jobs.findOne({ jobTitle, company, description, skills, location, salary, jobType, employerMail, status })
+        const existingJob = await jobs.findOne({ jobTitle, company, description, skills, location, salary, jobType, employerMail,experience, status })
         if (existingJob) {
             res.status(400).json("Already added job..")
         } else {
-            const newJob = new jobs({ jobTitle, company, description, skills, location, salary, jobType, employerMail, status })
+            const newJob = new jobs({ jobTitle, company, description, skills, location, salary, jobType, employerMail,experience, status })
 
             await newJob.save() //save to mongodb
             res.status(200).json(newJob)
@@ -32,7 +32,7 @@ exports.getAllJobsController = async (req, res) => {
     try {
 
         const alljobs = await jobs.find()
-        console.log(alljobs);
+        //console.log(alljobs);
 
         if (alljobs.length == 0) {
             res.status(400).json("no jobs present")
@@ -140,8 +140,8 @@ exports.jobEditController = async (req, res) => {
 
     const id = body._id
 
-    const {jobTitle,company,description,skills,location,salary,jobType,employerMail,status}=req.body
-    console.log(jobTitle,company,description,skills,location,salary,jobType,employerMail,status);
+    const {jobTitle,company,description,skills,location,salary,jobType,employerMail,experience,status}=req.body
+    console.log(jobTitle,company,description,skills,location,salary,jobType,employerMail,experience,status);
     
 
     // console.log(id);
@@ -150,7 +150,7 @@ exports.jobEditController = async (req, res) => {
         //updated job with that id
         const updatedJob = await jobs.findByIdAndUpdate(
             id,
-            { $set: { jobTitle, company, description, skills, location, salary, jobType, employerMail, status } },
+            { $set: { jobTitle, company, description, skills, location, salary, jobType, employerMail,experience, status } },
             { new: true }
         );
 
@@ -170,32 +170,4 @@ exports.jobEditController = async (req, res) => {
 }
 
 
-// Replace (update entire document)
-// - This replaces the whole document with the payload sent in `req.body`.
-// - It preserves the document _id (we delete any incoming _id from the body).
-// - runValidators ensures schema validation runs on replacement.
-// Note: Replace will remove any fields not provided in the replacement object.
-exports.replaceJobController = async (req, res) => {
-    try {
-        const payload = { ...req.body };
-        const id = payload._id || req.params.id || req.body.id;
 
-        if (!id) return res.status(400).json('Missing job id');
-
-        // Ensure we don't overwrite the _id field
-        delete payload._id;
-
-        // Replace the entire document with `payload` (must include all required fields)
-        const replaced = await jobs.findOneAndReplace(
-            { _id: id },
-            payload,
-            { new: true, runValidators: true }
-        );
-
-        if (!replaced) return res.status(404).json('Job not found');
-
-        res.status(200).json(replaced);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-};
