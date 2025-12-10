@@ -22,6 +22,9 @@ jobifyServer.use(cors())
 jobifyServer.use(express.json())
 // use route
 jobifyServer.use(route)
+// exporting upload folder
+jobifyServer.use("/uploads",express.static("./uploads"))
+
 
 // create port 
 PORT = 4000 || process.env.PORT

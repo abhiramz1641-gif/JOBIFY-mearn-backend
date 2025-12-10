@@ -169,5 +169,28 @@ exports.jobEditController = async (req, res) => {
 
 }
 
+exports.getJobsPostedByEmployerController = async (req, res) => {
 
+    try {
+
+        const reqBoby = req.body
+        employerMail = reqBoby.mail
+        console.log(employerMail);
+
+        const job = await jobs.find({employerMail })
+        console.log(job);
+
+        if (job) {
+            res.status(200).json(job)
+        } else {
+            res.status(400).json("no jobs present")
+
+        }
+
+    } catch (err) {
+        res.status(500).json(err)
+
+    }
+
+}
 

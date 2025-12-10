@@ -1,29 +1,36 @@
 // import multer
-const multer = require("multer");
+const multer = require('multer');
+const path = require('path');
 
-// create disk storage
+// create disk Storage
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./resumes");  // folder to save resumes
+
+    destination: (req, file, callback) => {
+        callback(null, './uploads');  
     },
-    filename: (req, file, cb) => {
-        cb(null, `resume-${file.originalname}`);
+
+    filename: (req, file, callback) => {
+        const uniqueName = Date.now() + '-' + file.originalname;
+        callback(null, uniqueName);
     }
 });
 
-// file filter
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "application/pdf") {
-        cb(null, true);
+// File filter (ONLY PDF)
+const fileFilter = (req, file, callback) => {
+
+    const ext = path.extname(file.originalname).toLowerCase();
+
+    if (ext === '.pdf') {
+        callback(null, true);
     } else {
-        cb(null, false);
-        return cb(new Error("Only PDF files are allowed for resume upload"));
+        callback(null, false);
+        return callback(new Error('Only PDF files are allowed'));
     }
 };
 
-const resumeUpload = multer({
+const multerConfig = multer({
     storage,
     fileFilter
 });
 
-module.exports = resumeUpload;
+module.exports = multerConfig;
