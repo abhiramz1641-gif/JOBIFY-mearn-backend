@@ -1,8 +1,8 @@
-const jwt=require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 const jwtMiddleware = (req, res, next) => {
 
-    console.log("inside jwtmiddleware");
+    console.log("inside jwt Admin middleware");
 
     const authHeader = req.headers && req.headers.authorization
 
@@ -18,12 +18,17 @@ const jwtMiddleware = (req, res, next) => {
 
     const token = parts[1]
     console.log(token);
-    
+
     try {
         const jwtResponse = jwt.verify(token, process.env.sk)
         console.log(jwtResponse)
         req.payload = jwtResponse.userMail
-        return next()
+        if(req.payload=="max"){
+            return next()
+        }else{
+            return res.status(401).json({ error: "Invalid user." })
+        }
+        
     } catch (err) {
         console.error("JWT verification failed:", err.message)
         return res.status(401).json({ error: "Invalid or expired token" })
@@ -31,4 +36,4 @@ const jwtMiddleware = (req, res, next) => {
 
 }
 
-module.exports=jwtMiddleware
+module.exports = jwtMiddleware

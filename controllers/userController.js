@@ -5,8 +5,6 @@ const users = require("../models/userModel")
 const jwt = require('jsonwebtoken')
 
 
-
-
 // mail
 // const bcrypt = require("bcryptjs")
 
@@ -66,11 +64,10 @@ exports.loginController = async (req, res) => {
             // if (isMatch)
             if (existingUser.password == password) {
                 // JWT encryption 
-                const token = jwt.sign({ userMail: existingUser.email }, "secretKey")
+                const token = jwt.sign({ userMail: existingUser.email }, process.env.sk)
                 res.status(200).json({ existingUser, token })
             } else {
                 res.status(400).json("Password does not match")
-
             }
         } else {
             res.status(400).json("User does not exist")
@@ -80,8 +77,6 @@ exports.loginController = async (req, res) => {
         res.status(500).json(err)
 
     }
-
-
 
 }
 
