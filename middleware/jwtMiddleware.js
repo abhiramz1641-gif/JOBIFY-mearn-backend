@@ -10,6 +10,8 @@ const jwtMiddleware = (req, res, next) => {
         console.warn("Missing Authorization header in request")
         return res.status(401).json({ error: "Authorization header missing" })
     }
+    console.log(authHeader);
+    
 
     const parts = authHeader.split(' ')
     if (parts.length !== 2 || parts[0] !== 'Bearer') {

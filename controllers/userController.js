@@ -82,9 +82,9 @@ exports.loginController = async (req, res) => {
 
 exports.getUserData = async (req, res) => {
 
-    
 
-    const {email} = req.body
+
+    const { email } = req.body
 
     try {
 
@@ -102,100 +102,81 @@ exports.getUserData = async (req, res) => {
 
 }
 
+
+
+// exports.editUserController = async (req, res) => {
+
+
+//     const body = req.body;
+//     //console.log(body);
+
+//     const id = body._id
+
+
+//     //console.log(id);
+
+//     const { username, email, password, bio }=req.body
+
+//     const picc=req.file?req.file.filename:bio.pic
+//     console.log(picc);
+
+//     const newBio={...bio,pic:picc}
+
+//     try {
+//         //updated job with that id
+//         const updatedUser = await users.findByIdAndUpdate(
+//             id,
+//             { $set: { username, email, password, bio:newBio } },
+//             { new: true }
+//         );
+
+//         console.log(updatedUser); 
+
+//         if (!updatedUser) {
+//             return res.status(404).json("User not edited");
+//         }
+
+//         res.status(200).json(updatedUser);
+
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+
+// }
+
+
 exports.editUserController = async (req, res) => {
+    const { _id, username, email, password } = req.body
 
+    let bio = req.body.bio || {}
 
-    const body = req.body;
-    //console.log(body);
-
-    const id = body._id
-    
-    //console.log(id);
-
-    const { username, email, password, bio }=req.body
-
-    try {
-        //updated job with that id
-        const updatedUser = await users.findByIdAndUpdate(
-            id,
-            { $set: { username, email, password, bio } },
-            { new: true }
-        );
-
-        console.log(updatedUser); 
-
-        if (!updatedUser) {
-            return res.status(404).json("User not edited");
-        }
-
-        res.status(200).json(updatedUser);
-
-    } catch (err) {
-        res.status(500).json(err);
+    // skills back to normlalll
+    if (bio.skills) {
+        bio.skills = JSON.parse(bio.skills)
     }
 
+    const pic = req.file ? req.file.filename : bio.pic
+
+    const updatedUser = await users.findByIdAndUpdate(
+        _id,
+        {
+            $set: {
+                username,
+                email,
+                password,
+                bio: { ...bio, pic }
+            }
+        },
+        { new: true }
+    )
+
+    res.status(200).json(updatedUser)
 }
 
 
 
-// mail
 
-// exports.forgotPasswordController = async (req, res) => {
-//     const { email } = req.body
 
-//     const user = await users.findOne({ email })
-//     if (!user) {
-//         return res.json("If email exists, link sent")
-//     }
 
-//     const token = crypto.randomBytes(32).toString("hex")
-//     const tokenHash = crypto.createHash("sha256").update(token).digest("hex")
 
-//     user.resetPasswordToken = tokenHash
-//     user.resetPasswordExpires = Date.now() + 3600000
-//     await user.save()
 
-//     const link = `http://localhost:3000/reset-password/${user._id}/${token}`
-
-//     const transporter = nodemailer.createTransport({
-//         service: "gmail",
-//         auth: {
-//             user: "your@gmail.com",
-//             pass: "app_password"
-//         }
-//     })
-
-//     await transporter.sendMail({
-//         to: user.email,
-//         subject: "Password Reset",
-//         html: `<a href="${link}">${link}</a>`
-//     })
-
-//     res.json("If email exists, link sent")
-// }
-
-// exports.resetPasswordController = async (req,res)=>{
-//     const {id,token} = req.params
-//     const {password} = req.body
-
-//     const tokenHash = crypto.createHash("sha256").update(token).digest("hex")
-
-//     const user = await users.findOne({
-//         _id:id,
-//         resetPasswordToken: tokenHash,
-//         resetPasswordExpires: {$gt:Date.now()}
-//     })
-
-//     if(!user){
-//         return res.status(400).json("Invalid or expired link")
-//     }
-
-//     const hash = await bcrypt.hash(password,10)
-//     user.password = hash
-//     user.resetPasswordToken = undefined
-//     user.resetPasswordExpires = undefined
-
-//     await user.save()
-
-//     res.json("Password reset successful")
-// }

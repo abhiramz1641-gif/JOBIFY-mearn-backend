@@ -13,6 +13,16 @@ const route= require('./routes')
 // import DB file
 require('./dBconnection')
 
+
+
+// // AI
+//const aiRoutes = require("./routes/aiRoutes");
+
+
+
+
+
+
 // create the server 
 const jobifyServer = express()
 
@@ -24,6 +34,13 @@ jobifyServer.use(express.json())
 jobifyServer.use(route)
 // exporting upload folder
 jobifyServer.use("/uploads",express.static("./uploads"))
+
+
+
+// // AI
+//jobifyServer.use("/ai", aiRoutes);
+
+
 
 
 // create port 

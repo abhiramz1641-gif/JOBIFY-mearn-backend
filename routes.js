@@ -15,6 +15,10 @@ const jwtMiddleware = require('./middleware/jwtMiddleware');
 
 const jwtAdminMiddleware = require('./middleware/jwtAdminMidlleware');
 
+const imageMulter = require('./middleware/imageMulter')
+
+
+
 
 //create instance
 const route = new express.Router()
@@ -26,7 +30,7 @@ route.post("/register",userController.registerController)
 
 route.post("/login",userController.loginController)
 
-route.put("/user-edit",jwtMiddleware,userController.editUserController)
+route.put("/user-edit",jwtMiddleware,imageMulter.single('pic'),userController.editUserController)
 
 route.post("/get-user",jwtMiddleware,userController.getUserData)
 
@@ -76,6 +80,8 @@ route.get("/get-applications-admin",jwtAdminMiddleware,applicationController.get
 route.put("/admin-application-approval",jwtAdminMiddleware,applicationController.adminApplicationApprovalController)
 
 route.put("/admin-job-approval",jwtAdminMiddleware,jobController.adminJobApprovalController)
+
+
 
 
 
