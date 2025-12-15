@@ -99,6 +99,29 @@ exports.getJobsPostedByIdController = async (req, res) => {
 
 }
 
+exports.deleteJobController = async (req, res) => {
+
+    try {
+
+        const reqBoby = req.body
+        id = reqBoby.id
+        console.log(id);
+
+        const job = await jobs.findByIdAndDelete({ _id: id })
+        //console.log(job);
+
+        if (job) {
+            res.status(200).json("deleted")
+        } else {
+            res.status(400).json("no job")
+        }
+
+    } catch (err) {
+        res.status(500).json(err)
+
+    }
+
+}
 
 exports.adminJobApprovalController = async (req, res) => {
 

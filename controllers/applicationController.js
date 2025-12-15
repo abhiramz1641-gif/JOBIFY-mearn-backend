@@ -48,17 +48,19 @@ exports.getApplicationByJobIdApplicantController = async (req, res) => {
         const existingApplication = await applications.findOne({ jobId, userMail });
 
         if (!existingApplication) {
-            return res.status(500).json("no application found");
+            res.status(500).json("no application found");
+        }else{
+            res.status(200).json("already applied");
         }
 
-        res.status(200).json("already applied");
+        
 
     } catch (err) {
         res.status(500).json(err);
     }
 };
 
-// allappplication
+// all appplication
 exports.getAllApplicationController = async (req, res) => {
 
     try {
@@ -172,3 +174,28 @@ exports.employerRejectingApplicationController = async (req, res) => {
         res.status(500).json(err);
     }
 };
+
+// delete application
+exports.deleteApplicationController = async (req, res) => {
+
+    try {
+
+        const reqBoby = req.body
+        id = reqBoby.id
+        console.log(id);
+
+        const app = await applications.findByIdAndDelete({ _id: id })
+        //console.log(job);
+
+        if (app) {
+            res.status(200).json("deleted")
+        } else {
+            res.status(400).json("no application")
+        }
+
+    } catch (err) {
+        res.status(500).json(err)
+
+    }
+
+}

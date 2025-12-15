@@ -50,6 +50,8 @@ route.put("/job-edit",jobController.jobEditController)
 
 route.post("/jobs-postedBy-employer",jobController.getJobsPostedByEmployerController)
 
+route.delete("/delete-job",jwtMiddleware,jobController.deleteJobController)
+
 
 
 
@@ -68,6 +70,8 @@ route.post("/all-applications-by-user",jwtMiddleware,applicationController.getAp
 route.put("/employer-application-acceptence",applicationController.employerAcceptingApplicationController)
 
 route.put("/employer-application-reject",applicationController.employerRejectingApplicationController)
+
+route.delete("/delete-application",jwtMiddleware,applicationController.deleteApplicationController)
 
 
 //for admin only 
