@@ -18,6 +18,9 @@ require('./dBconnection')
 // // AI
 //const aiRoutes = require("./routes/aiRoutes");
 
+const chatRoutes = require("./routes/chatRoutes");
+
+
 
 
 
@@ -39,6 +42,9 @@ jobifyServer.use("/uploads",express.static("./uploads"))
 
 // // AI
 //jobifyServer.use("/ai", aiRoutes);
+
+jobifyServer.use("/api", chatRoutes);
+
 
 
 
