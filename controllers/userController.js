@@ -5,11 +5,7 @@ const users = require("../models/userModel")
 const jwt = require('jsonwebtoken')
 
 
-// mail
-// const bcrypt = require("bcryptjs")
 
-// const crypto = require("crypto")
-// const nodemailer = require("nodemailer")
 
 
 // register
