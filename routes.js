@@ -2,11 +2,11 @@
 const express = require('express')
 
 // import the usercontroller
-const userController=require('./controllers/userController')
+const userController = require('./controllers/userController')
 
-const jobController=require("./controllers/jobController")
+const jobController = require("./controllers/jobController")
 
-const applicationController=require("./controllers/applicationController")
+const applicationController = require("./controllers/applicationController")
 
 
 const multerConfig = require('./middleware/multermiddleware')
@@ -17,6 +17,9 @@ const jwtAdminMiddleware = require('./middleware/jwtAdminMidlleware');
 
 const imageMulter = require('./middleware/imageMulter')
 
+const resumeController = require("./controllers/resumeController");
+
+
 
 
 
@@ -26,66 +29,68 @@ const route = new express.Router()
 
 
 // user
-route.post("/register",userController.registerController)
+route.post("/register", userController.registerController)
 
-route.post("/login",userController.loginController)
+route.post("/login", userController.loginController)
 
-route.put("/user-edit",jwtMiddleware,imageMulter.single('pic'),userController.editUserController)
+route.put("/user-edit", jwtMiddleware, imageMulter.single('pic'), userController.editUserController)
 
-route.post("/get-user",jwtMiddleware,userController.getUserData)
+route.post("/get-user", jwtMiddleware, userController.getUserData)
 
 
 
 // jobs 
 
-route.post("/add-job",jwtMiddleware,jobController.addJobController)
+route.post("/add-job", jwtMiddleware, jobController.addJobController)
 
-route.post("/jobs-posted",jwtMiddleware,jobController.getJobsPostedController)
+route.post("/jobs-posted", jwtMiddleware, jobController.getJobsPostedController)
 
-route.post("/jobs-postedById",jobController.getJobsPostedByIdController)
+route.post("/jobs-postedById", jobController.getJobsPostedByIdController)
 
-route.get("/all-jobs",jwtMiddleware,jobController.getAllJobsController)
+route.get("/all-jobs", jwtMiddleware, jobController.getAllJobsController)
 
-route.put("/job-edit",jobController.jobEditController)
+route.put("/job-edit", jobController.jobEditController)
 
-route.post("/jobs-postedBy-employer",jobController.getJobsPostedByEmployerController)
+route.post("/jobs-postedBy-employer", jobController.getJobsPostedByEmployerController)
 
-route.delete("/delete-job",jwtMiddleware,jobController.deleteJobController)
+route.delete("/delete-job", jwtMiddleware, jobController.deleteJobController)
 
 
 
 
 // application
 
-route.post("/add-application",multerConfig.single('resume'),applicationController.addApplicationController)
+route.post("/add-application", multerConfig.single('resume'), applicationController.addApplicationController)
 
-route.post("/get-applied-status",applicationController.getApplicationByJobIdApplicantController)
+route.post("/get-applied-status", applicationController.getApplicationByJobIdApplicantController)
 
-route.get("/get-applications",jwtMiddleware,applicationController.getAllApplicationController)
+route.get("/get-applications", jwtMiddleware, applicationController.getAllApplicationController)
 
-route.post("/all-applications-jobId",applicationController.getApplicationCountEmployerController)
+route.post("/all-applications-jobId", applicationController.getApplicationCountEmployerController)
 
-route.post("/all-applications-by-user",jwtMiddleware,applicationController.getApplicationByUserController)
+route.post("/all-applications-by-user", jwtMiddleware, applicationController.getApplicationByUserController)
 
-route.put("/employer-application-acceptence",applicationController.employerAcceptingApplicationController)
+route.put("/employer-application-acceptence", applicationController.employerAcceptingApplicationController)
 
-route.put("/employer-application-reject",applicationController.employerRejectingApplicationController)
+route.put("/employer-application-reject", applicationController.employerRejectingApplicationController)
 
-route.delete("/delete-application",jwtMiddleware,applicationController.deleteApplicationController)
+route.delete("/delete-application", jwtMiddleware, applicationController.deleteApplicationController)
 
 
 //for admin only 
-route.post("/get-user-admin",jwtAdminMiddleware,userController.getUserData)
+route.post("/get-user-admin", jwtAdminMiddleware, userController.getUserData)
 
-route.get("/all-jobs-admin",jwtAdminMiddleware,jobController.getAllJobsController)
+route.get("/all-jobs-admin", jwtAdminMiddleware, jobController.getAllJobsController)
 
-route.get("/get-applications-admin",jwtAdminMiddleware,applicationController.getAllApplicationController)
+route.get("/get-applications-admin", jwtAdminMiddleware, applicationController.getAllApplicationController)
 
-route.put("/admin-application-approval",jwtAdminMiddleware,applicationController.adminApplicationApprovalController)
+route.put("/admin-application-approval", jwtAdminMiddleware, applicationController.adminApplicationApprovalController)
 
-route.put("/admin-job-approval",jwtAdminMiddleware,jobController.adminJobApprovalController)
+route.put("/admin-job-approval", jwtAdminMiddleware, jobController.adminJobApprovalController)
 
 
+
+route.post("/scan-resume",multerConfig.single("resume"),resumeController.scanResumeController);
 
 
 
